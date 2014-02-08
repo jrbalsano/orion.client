@@ -22,6 +22,8 @@ var orionNode = require('./lib/node');
 var orionWorkspace = require('./lib/workspace');
 var orionNodeStatic = require('./lib/orionode_static');
 var orionStatic = require('./lib/orion_static');
+var term = require('term.js');
+var pty = require('pty.js');
 
 var LIBS = path.normalize(path.join(__dirname, 'lib/'));
 var NODE_MODULES = path.normalize(path.join(__dirname, 'node_modules/'));
@@ -53,8 +55,36 @@ function startServer(options) {
 	try {
 		var appContext = new AppContext({fileRoot: '/file', workspaceDir: workspaceDir, configParams: configParams});
 
+    
+    // Open Terminal Connection
+
+    var buff = []
+      , termsocket
+      , terminal;
+
+    terminal = pty.fork(process.env.SHELL || 'sh', [], {
+      name: require('fs').existsSync('/usr/share/terminfo/x/xterm-256color')
+      ? 'xterm-256color'
+      : 'xterm',
+         cols: 80,
+         rows: 24,
+         cwd: process.env.HOME
+    });
+
+    terminal.on('data', function(data) {
+      return !termsocket
+      ? buff.push(data)
+      : termsocket.emit('data', data);
+    });
+
+    console.log(''
+        + 'Created shell h pty master/slave'
+        + ' pair (master: %d, pid: %d)',
+        terminal.fd, terminal.pid);
+
 		// HTTP server
 		var app = connect()
+      .use(term.middleware())
 			.use(logger(options))
 			.use(connect.urlencoded())
 			.use(auth(options))
@@ -83,8 +113,31 @@ function startServer(options) {
 			}))
 			.listen(options.port);
 		// Socket server
-		var io = socketio.listen(app, { 'log level': 1 });
-		appSocket.install({io: io, appContext: appContext});
+		//var io = socketio.listen(app, { 'log level': 1 });
+
+    var termio;
+
+    // Terminal Socket
+    termio = socketio.listen(app, { 'log level': 1 });
+
+    termio.sockets.on('connection', function(sock) {
+      termsocket = sock;
+
+      termsocket.on('data', function(data) {
+        terminal.write(data);
+      });
+
+      termsocket.on('disconnect', function() {
+        termsocket = null;
+      });
+
+      while (buff.length) {
+        termsocket.emit('data', buff.shift());
+      }
+    });
+
+	  //appSocket.install({io: io, appContext: appContext});
+		appSocket.install({io: termio, appContext: appContext});
 		app.on('error', handleError);
 		return app;
 	} catch (e) {
