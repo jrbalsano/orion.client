@@ -22,6 +22,7 @@ var orionNode = require('./lib/node');
 var orionWorkspace = require('./lib/workspace');
 var orionNodeStatic = require('./lib/orionode_static');
 var orionStatic = require('./lib/orion_static');
+var term = require('term.js');
 
 var LIBS = path.normalize(path.join(__dirname, 'lib/'));
 var NODE_MODULES = path.normalize(path.join(__dirname, 'node_modules/'));
@@ -55,6 +56,7 @@ function startServer(options) {
 
 		// HTTP server
 		var app = connect()
+      .use(term.middleware())
 			.use(logger(options))
 			.use(connect.urlencoded())
 			.use(auth(options))
