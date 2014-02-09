@@ -124,7 +124,6 @@ function startServer(options) {
       termsocket = sock;
 
       termsocket.on('data', function(data) {
-        if (stream) stream.write('IN: ' + data + '\n-\n');
         terminal.write(data);
       });
 
