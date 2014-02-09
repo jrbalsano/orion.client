@@ -9,4 +9,3 @@ npm-debug.log
 .workspace/
 build/.temp/
 test/.test_workspace/
-orion.conf
