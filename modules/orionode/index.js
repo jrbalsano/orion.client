@@ -123,7 +123,7 @@ function startServer(options) {
       });
 
       sock.on('disconnect', function() {
-        terminal.kill()
+        terminal.destroy()
         termsocket = null;
       });
 
