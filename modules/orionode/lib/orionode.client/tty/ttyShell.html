@@ -32,7 +32,9 @@
 	
 	<script src="/socket.io/socket.io.js"></script>
 	<script src="term.js"></script>
+
 	<script>
+	var term;
   	;(function() {
       // default settings:
       var bgColor = '#000000';
@@ -41,12 +43,13 @@
       window.onload = function() {
         var socket = io.connect();
         socket.on('connect', function() {
-          var term = new Terminal({
-            cols: 200,
-            rows: 27,
+          term = new Terminal({
+            cols: 150,
+            rows: 30,
             useStyle: true,
             screenKeys: true,
           });
+
           term.colors[257] = txColor;
           term.colors[256] = bgColor;
           term.on('data', function(data) {
@@ -73,6 +76,7 @@
 
   			var txButton = document.getElementById("tx");
   			txButton.onchange = changeTx;
+
   		};
 
       function changeTx() {
@@ -100,8 +104,10 @@
       }
 
   		function changeBg() {
+  			
         var t = document.getElementsByClassName('terminal');
         var bg = document.getElementById("bg").value;
+        
         switch(bg)
         {
         case 'Blue':
@@ -117,8 +123,21 @@
           bgColor = '#000000';
         }
         t[0].style.backgroundColor = bgColor;
-  		}
+  		}	
+
 		}).call(this);
+		
+		function changeCols() {
+			var newRows = document.getElementById("rw");
+			var newCols = document.getElementById("cl");
+			term.resize(newCols.value, newRows.value);
+		}
+		
+		function changeRows() {
+			var newRows = document.getElementById("rw");
+			var newCols = document.getElementById("cl");
+			term.resize(newCols.value, newRows.value);
+		}
 		
 		function showDiv() {
 			var d = document.getElementById("dropdown");
@@ -127,6 +146,7 @@
 			else
 				d.style.display = "block";
 		}
+		
 	</script>
 
 </head>
@@ -169,6 +189,15 @@
 								</label>
 							</div>
 						</div>
+						
+						<div>
+							<form name="sizeForm">
+								<br>
+								Columns: <input type="number" id="cl" size="4" value="150" onchange="changeCols()">
+								Rows: <input type="number" id="rw" size="4" value="30" onchange="changeRows()">
+							</form> 
+						</div>
+						
 					</div>
 				</div>
 			
@@ -179,25 +208,6 @@
 				<div class="mainToolbar toolComposite" id="pageToolbar"></div>
 				<div id="mainNode" class="toolbarTarget pageLayoutTarget toolbarTarget-toolbarHidden">
 					<div id ="terminalBox" class="terminalContainer"></div>
-					<!-- 
-					<div>
-						Background Color:
-						<select id="bg">
-                <option selected="selected">Black</option>
-							  <option>Grey</option>
-							  <option>Green</option>
-							  <option>Blue</option>
-						</select>
-						Text Color:
-						<select id="tx">
-                <option selected="selected">White</option>
-							  <option>Black</option>
-							  <option>Green</option>
-							  <option>Blue</option>
-                <option>Orange</option>
-						</select>
-					</div> 
-					-->
 				</div>
 			</div>
 		</div>
