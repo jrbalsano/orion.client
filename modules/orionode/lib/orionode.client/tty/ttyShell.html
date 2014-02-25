@@ -119,6 +119,14 @@
         t[0].style.backgroundColor = bgColor;
   		}
 		}).call(this);
+		
+		function showDiv() {
+			var d = document.getElementById("dropdown");
+			if (d.style.display == "block")
+				d.style.display = "none";
+			else
+				d.style.display = "block";
+		}
 	</script>
 
 </head>
@@ -127,16 +135,51 @@
 		<div id="sideMenu" class="sideMenu"></div>
 		<div id="pageContent" class="content-fixedHeight">
 			<div style="background:#F0F0F0; padding-top:8px; padding-right:10px;" align="right">
-			<button class="orionButton commandImage" aria-describedby="tooltip1391987211087">
-				<span class="commandSprite core-sprite-wrench"></span>
-			</button>
+			
+				<button class="orionButton commandImage dropdownSelection" onclick="showDiv()">
+					<span class="commandSprite core-sprite-wrench"></span>
+				</button>
+				
+				<div id="dropdown" class="dropDownContainer" style="margin-top: 0px; right: 9px; display: none;" tabindex="0">
+					<div class="sections local">
+						<div>
+							<div class="setting-property">
+								<label>
+									<span class="setting-label">Background Color:</span>
+									<select id="bg" class="setting-control">
+										<option selected="selected">Black</option>
+								  		<option>Grey</option>
+								  		<option>Green</option>
+								  		<option>Blue</option>
+									</select>
+								</label>
+							</div>
+						</div>
+						<div>
+							<div class="setting-property">
+								<label>
+									<span class="setting-label">Text Color:</span>
+									<select id="tx" class="setting-control">
+										<option selected="selected">White</option>
+								  		<option>Black</option>
+								  		<option>Green</option>
+								  		<option>Blue</option>
+								  		<option>Orange</option>
+									</select>
+								</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			
 			</div>
 				
 		
 			<div class="fixedToolbarHolder mainpane mainPanelLayout">
 				<div class="mainToolbar toolComposite" id="pageToolbar"></div>
 				<div id="mainNode" class="toolbarTarget pageLayoutTarget toolbarTarget-toolbarHidden">
-					<div id ="terminalBox" class="terminalContainer" style="width:100%; height:100%;"></div>
+					<div id ="terminalBox" class="terminalContainer"></div>
+					<!-- 
 					<div>
 						Background Color:
 						<select id="bg">
@@ -153,7 +196,8 @@
 							  <option>Blue</option>
                 <option>Orange</option>
 						</select>
-					</div>
+					</div> 
+					-->
 				</div>
 			</div>
 		</div>
