@@ -78,9 +78,8 @@
   			txButton.onchange = changeTx;
 
   		};
-
       function changeTx() {
-        var t = document.getElementsByClassName('terminal');
+		var t = document.getElementsByClassName('terminal');
         var tx = document.getElementById("tx").value;
         switch(tx)
         {
@@ -125,15 +124,10 @@
         t[0].style.backgroundColor = bgColor;
   		}	
 
+
 		}).call(this);
 		
-		function changeCols() {
-			var newRows = document.getElementById("rw");
-			var newCols = document.getElementById("cl");
-			term.resize(newCols.value, newRows.value);
-		}
-		
-		function changeRows() {
+		function resizeTerminal() {
 			var newRows = document.getElementById("rw");
 			var newCols = document.getElementById("cl");
 			term.resize(newCols.value, newRows.value);
@@ -190,11 +184,12 @@
 							</div>
 						</div>
 						
+						
 						<div>
 							<form name="sizeForm">
 								<br>
-								Columns: <input type="number" id="cl" size="4" value="150" onchange="changeCols()">
-								Rows: <input type="number" id="rw" size="4" value="30" onchange="changeRows()">
+								Columns: <input type="number" id="cl" size="4" value="150" onchange="resizeTerminal()">
+								Rows: <input type="number" id="rw" size="4" value="30" onchange = "resizeTerminal()">
 							</form> 
 						</div>
 						
