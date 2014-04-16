@@ -26,7 +26,7 @@
 		"plugins/nodePlugin.html":true,
 		"search/plugins/searchPagePlugin.html":true,
 		"plugins/projectsPlugin.html" :true,
-		"plugins/ttyShellPlugin.html" :true
+		"plugins/consolePlugin.html" :true
 	},
 	"/settingsContainer":{
 		"categories":{
